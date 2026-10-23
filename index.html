@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Bookmaker · Pixel Universe</title>
+<meta name="description" content="The betting shop of the Pixel Universe. Odds on every Glacial race, set by the house and moved by the city's regulars.">
+<meta name="theme-color" content="#E6ECEE" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#10181D" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 9 9%22 shape-rendering=%22crispEdges%22%3E%3Cpath fill=%22%2314212A%22 d=%22M0 1h9v7H0z%22/%3E%3Cpath fill=%22%23F2D024%22 d=%22M2 3h2v1H2zM5 3h2v1H5z%22/%3E%3Cpath fill=%22%23FF5FA2%22 d=%22M2 5h1v1H2zM4 5h3v1H4z%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="masthead wrap">
+  <div>
+    <h1>The Bookmaker</h1>
+    <p class="lede">Odds on every race at <a href="https://dvexperiments.github.io/Glacial/">Glacial</a>, set by the house and moved by the regulars of <a href="https://dvexperiments.github.io/City/">Pixel City</a>.</p>
+  </div>
+  <div class="purse" aria-live="polite">
+    <span class="purse-label">Your balance</span>
+    <strong id="balance">…</strong>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+  <p class="notice" id="notice" hidden></p>
+
+  <section class="counter" aria-labelledby="board-title">
+    <div class="board" id="board">
+      <div class="board-head">
+        <h2 id="board-title">Loading the board</h2>
+        <p id="board-status"></p>
+      </div>
+      <ol class="runners" id="runners"></ol>
+      <p class="board-foot" id="board-foot"></p>
+    </div>
+
+    <form class="slip" id="slip" novalidate>
+      <h2>Bet slip</h2>
+      <p class="slip-pick" id="slip-pick">Choose a pixel on the board.</p>
+      <label for="stake">Stake in watts</label>
+      <div class="stake-row">
+        <input id="stake" name="stake" type="number" inputmode="numeric" min="10" step="10" value="50">
+        <button type="button" class="chip" data-stake="10">10</button>
+        <button type="button" class="chip" data-stake="50">50</button>
+        <button type="button" class="chip" data-stake="100">100</button>
+      </div>
+      <p class="slip-return" id="slip-return"></p>
+      <button type="submit" class="place" id="place" disabled>Place bet</button>
+      <p class="slip-msg" id="slip-msg" role="status"></p>
+      <p class="small">Odds are fixed when you place the bet. Play money only, kept in this browser.</p>
+    </form>
+  </section>
+
+  <section id="live-section" hidden aria-labelledby="live-title">
+    <h2 id="live-title">In running</h2>
+    <p class="small" id="live-sub"></p>
+    <ol class="live" id="live"></ol>
+  </section>
+
+  <div class="columns">
+    <section aria-labelledby="slips-title">
+      <h2 id="slips-title">Your slips</h2>
+      <ol class="slips" id="slips"></ol>
+    </section>
+    <section aria-labelledby="feed-title">
+      <h2 id="feed-title">From the counter</h2>
+      <ol class="feed" id="feed"></ol>
+    </section>
+  </div>
+
+  <section aria-labelledby="results-title">
+    <h2 id="results-title">Results</h2>
+    <div class="scroll"><table class="table" id="results"></table></div>
+  </section>
+
+  <section aria-labelledby="regulars-title">
+    <h2 id="regulars-title">The regulars</h2>
+    <p class="small">Forty-eight residents of Pixel City bet here. Their money moves the prices you see.</p>
+    <div class="scroll"><table class="table" id="regulars"></table></div>
+  </section>
+</main>
+
+<footer class="wrap foot">
+  <p>Prices never affect results. Betting closes 30 minutes before each race. A new month brings 500 W; 1 January returns every wallet to 1,000 W.</p>
+  <p>Part of the <a href="https://github.com/DVExperiments">Pixel Universe</a>.</p>
+</footer>
+
+<!-- upstream, in dependency order: Glacial, then Weather, Senate and City. All are required. -->
+<script src="https://dvexperiments.github.io/Glacial/js/pixels.js"></script>
+<script src="https://dvexperiments.github.io/Glacial/js/sim.js"></script>
+<script src="https://dvexperiments.github.io/Glacial/js/league.js"></script>
+<script>window.PixelUniverseOptions = Object.assign(window.PixelUniverseOptions || {}, { senateSkipGlacial: true });</script>
+<script src="https://dvexperiments.github.io/Weather/universe.js"></script>
+<script src="https://dvexperiments.github.io/Senate/universe.js"></script>
+<script src="https://dvexperiments.github.io/City/universe.js"></script>
+<script src="universe.js"></script>
+<script src="js/wallet.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
