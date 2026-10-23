@@ -13,7 +13,7 @@
 (function (root) {
   'use strict';
 
-  const VERSION = '0.1.0';
+  const VERSION = '0.2.0';
   const MIN = 60000, H = 3600000, DAY = 86400000;
   const OPENS = Date.UTC(2026, 9, 1);   // the shop opens for the October Grand Prix
   const CLOSE_BEFORE = 30 * MIN;        // betting closes 30 minutes before the off
@@ -484,11 +484,20 @@
     return { status: 'lost', payout: 0, at: race.startMs + race.windowMs };
   }
 
+  /** Every settled market whose race ended in [from, to), slimmed for archiving. */
+  function marketsBetween(from, to) {
+    if (!ready() || to <= OPENS) return [];
+    ensureSettled(to - 1);
+    return settled.filter((m) => m.startMs + m.windowMs >= from && m.startMs + m.windowMs < to).map((m) => ({
+      race: m.raceId, name: m.name, winner: m.winner, sp: m.sp[m.winner], bets: m.bets.length, taken: m.taken, paid: m.paid, void: m.void
+    }));
+  }
+
   root.PixelUniverse = root.PixelUniverse || {};
   root.PixelUniverse.bookmaker = {
     version: VERSION, source: 'bookmaker', startDate: ymd(OPENS), opens: OPENS, ready,
     rules: { margin: MARGIN, closeBefore: CLOSE_BEFORE, minStake: MIN_STAKE, startBalance: START_BALANCE, stipend: STIPEND },
-    stateAt, eventsBetween, settle,
+    stateAt, eventsBetween, settle, marketsBetween,
     regulars: () => (ready() ? ensureRegulars() : []),
     STYLES, SUPERSTITIONS
   };
