@@ -130,10 +130,10 @@
       $('place').disabled = true;
       return;
     }
-    if (!p) { $('slip-pick').textContent = 'Choose a pixel on the board.'; $('slip-return').textContent = ''; $('place').disabled = true; return; }
+    $('place').disabled = false;
+    if (!p) { $('slip-pick').textContent = 'Choose a pixel on the board.'; $('slip-return').textContent = ''; return; }
     $('slip-pick').textContent = pixelName(pick) + ' at ' + odds(p);
     $('slip-return').textContent = stake >= W.MIN_STAKE ? 'Returns ' + w(stake * p) + ' if ' + pixelName(pick) + ' wins.' : 'The minimum stake is ' + W.MIN_STAKE + ' W.';
-    $('place').disabled = stake < W.MIN_STAKE || stake > wallet.balance;
   }
 
   $('runners').addEventListener('click', (e) => {
@@ -153,8 +153,10 @@
     refresh(); // take the price as it stands this second
     if (!market || now >= market.closes) { $('slip-msg').textContent = 'Betting has closed on this race.'; renderSlip(); return; }
     const p = priceOf(pick);
-    if (!p) return;
+    if (!p) { $('slip-msg').textContent = 'Tap a pixel on the board first, then place your bet.'; return; }
     const stake = Math.floor(Number($('stake').value) || 0);
+    if (stake < W.MIN_STAKE) { $('slip-msg').textContent = 'The minimum stake is ' + W.MIN_STAKE + ' W.'; return; }
+    if (stake > wallet.balance) { $('slip-msg').textContent = 'That is more than your balance of ' + w(wallet.balance) + '.'; return; }
     const r = W.place(wallet, { raceId: market.raceId, raceName: market.name, pixel: pick, pixelName: pixelName(pick), stake, odds: p, placed: now, source: 'bookmaker' });
     if (r.error) { $('slip-msg').textContent = r.error; return; }
     $('slip-msg').textContent = 'Bet placed: ' + w(stake) + ' on ' + pixelName(pick) + ' at ' + odds(p) + '.';
